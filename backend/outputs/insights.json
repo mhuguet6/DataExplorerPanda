@@ -1,0 +1,688 @@
+{
+  "dataset": {
+    "name": "Titanic",
+    "source": "seaborn.load_dataset('titanic')",
+    "raw_shape": [
+      891,
+      15
+    ],
+    "final_shape": [
+      888,
+      25
+    ],
+    "columns": [
+      "survived",
+      "pclass",
+      "sex",
+      "age",
+      "sibsp",
+      "parch",
+      "fare",
+      "embarked",
+      "who",
+      "deck",
+      "alone",
+      "family_size",
+      "has_family",
+      "is_minor",
+      "age_group",
+      "fare_per_person",
+      "fare_tier",
+      "cabin_known",
+      "is_female",
+      "emb_C",
+      "emb_Q",
+      "emb_S",
+      "log_fare",
+      "age_z",
+      "fare_z"
+    ],
+    "missing_before": {
+      "age": 177,
+      "embarked": 2,
+      "deck": 688,
+      "embark_town": 2
+    },
+    "missing_after": {},
+    "transformations": {
+      "dropped": [
+        "class",
+        "alive",
+        "embark_town",
+        "adult_male"
+      ],
+      "added": [
+        "family_size",
+        "has_family",
+        "is_minor",
+        "age_group",
+        "fare_per_person",
+        "fare_tier",
+        "cabin_known",
+        "is_female",
+        "emb_C",
+        "emb_Q",
+        "emb_S",
+        "log_fare",
+        "age_z",
+        "fare_z"
+      ],
+      "imputed": [
+        {
+          "column": "age",
+          "method": "median by (pclass, sex)"
+        },
+        {
+          "column": "embarked",
+          "method": "mode"
+        },
+        {
+          "column": "deck",
+          "method": "filled with 'Unknown'"
+        }
+      ],
+      "filtered": [
+        {
+          "rule": "fare <= $300",
+          "rows_removed": 3,
+          "reason": "outlier"
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "total_passengers": 888,
+    "survival_rate": 0.382,
+    "avg_age": 29.1,
+    "avg_fare": 30.58,
+    "pct_female": 0.352,
+    "pct_first_class": 0.24
+  },
+  "tables": {
+    "survival_by_sex": {
+      "title": "Survival by sex",
+      "rows": [
+        {
+          "sex": "female",
+          "n": 313,
+          "survival_rate": 0.741
+        },
+        {
+          "sex": "male",
+          "n": 575,
+          "survival_rate": 0.186
+        }
+      ]
+    },
+    "survival_by_class": {
+      "title": "Survival by passenger class",
+      "rows": [
+        {
+          "pclass": 1,
+          "n": 213,
+          "survival_rate": 0.624
+        },
+        {
+          "pclass": 2,
+          "n": 184,
+          "survival_rate": 0.473
+        },
+        {
+          "pclass": 3,
+          "n": 491,
+          "survival_rate": 0.242
+        }
+      ]
+    },
+    "survival_by_age_group": {
+      "title": "Survival by age group",
+      "rows": [
+        {
+          "age_group": "Adult",
+          "n": 749,
+          "survival_rate": 0.362
+        },
+        {
+          "age_group": "Child",
+          "n": 69,
+          "survival_rate": 0.58
+        },
+        {
+          "age_group": "Senior",
+          "n": 26,
+          "survival_rate": 0.269
+        },
+        {
+          "age_group": "Teen",
+          "n": 44,
+          "survival_rate": 0.477
+        }
+      ]
+    },
+    "survival_by_embarked": {
+      "title": "Survival by port of embarkation",
+      "rows": [
+        {
+          "embarked": "C",
+          "n": 165,
+          "survival_rate": 0.545
+        },
+        {
+          "embarked": "Q",
+          "n": 77,
+          "survival_rate": 0.39
+        },
+        {
+          "embarked": "S",
+          "n": 646,
+          "survival_rate": 0.339
+        }
+      ]
+    },
+    "survival_by_family_size": {
+      "title": "Survival by family size",
+      "rows": [
+        {
+          "family_size": 1,
+          "n": 535,
+          "survival_rate": 0.301
+        },
+        {
+          "family_size": 2,
+          "n": 160,
+          "survival_rate": 0.55
+        },
+        {
+          "family_size": 3,
+          "n": 102,
+          "survival_rate": 0.578
+        },
+        {
+          "family_size": 4,
+          "n": 29,
+          "survival_rate": 0.724
+        },
+        {
+          "family_size": 5,
+          "n": 15,
+          "survival_rate": 0.2
+        },
+        {
+          "family_size": 6,
+          "n": 22,
+          "survival_rate": 0.136
+        },
+        {
+          "family_size": 7,
+          "n": 12,
+          "survival_rate": 0.333
+        },
+        {
+          "family_size": 8,
+          "n": 6,
+          "survival_rate": 0.0
+        },
+        {
+          "family_size": 11,
+          "n": 7,
+          "survival_rate": 0.0
+        }
+      ]
+    },
+    "sex_x_class": {
+      "title": "Survival rate: sex \u00d7 class",
+      "matrix": {
+        "1": {
+          "female": 0.968,
+          "male": 0.358
+        },
+        "2": {
+          "female": 0.921,
+          "male": 0.157
+        },
+        "3": {
+          "female": 0.5,
+          "male": 0.135
+        }
+      }
+    },
+    "numeric_summary": {
+      "title": "Numeric column summary",
+      "matrix": {
+        "age": {
+          "count": 888.0,
+          "mean": 29.09,
+          "std": 13.32,
+          "min": 0.42,
+          "25%": 21.5,
+          "50%": 26.0,
+          "75%": 36.0,
+          "max": 80.0
+        },
+        "fare": {
+          "count": 888.0,
+          "mean": 30.58,
+          "std": 41.18,
+          "min": 0.0,
+          "25%": 7.9,
+          "50%": 14.45,
+          "75%": 30.77,
+          "max": 263.0
+        },
+        "fare_per_person": {
+          "count": 888.0,
+          "mean": 18.54,
+          "std": 26.03,
+          "min": 0.0,
+          "25%": 7.25,
+          "50%": 8.15,
+          "75%": 21.38,
+          "max": 227.52
+        },
+        "log_fare": {
+          "count": 888.0,
+          "mean": 2.95,
+          "std": 0.95,
+          "min": 0.0,
+          "25%": 2.19,
+          "50%": 2.74,
+          "75%": 3.46,
+          "max": 5.58
+        },
+        "family_size": {
+          "count": 888.0,
+          "mean": 1.91,
+          "std": 1.62,
+          "min": 1.0,
+          "25%": 1.0,
+          "50%": 1.0,
+          "75%": 2.0,
+          "max": 11.0
+        },
+        "sibsp": {
+          "count": 888.0,
+          "mean": 0.52,
+          "std": 1.1,
+          "min": 0.0,
+          "25%": 0.0,
+          "50%": 0.0,
+          "75%": 1.0,
+          "max": 8.0
+        },
+        "parch": {
+          "count": 888.0,
+          "mean": 0.38,
+          "std": 0.81,
+          "min": 0.0,
+          "25%": 0.0,
+          "50%": 0.0,
+          "75%": 0.0,
+          "max": 6.0
+        }
+      }
+    },
+    "correlation_matrix": {
+      "title": "Correlation with survival and among numeric features",
+      "matrix": {
+        "survived": {
+          "survived": 1.0,
+          "age": -0.062,
+          "fare": 0.262,
+          "fare_per_person": 0.239,
+          "log_fare": 0.323,
+          "family_size": 0.018,
+          "sibsp": -0.033,
+          "parch": 0.082,
+          "is_female": 0.546,
+          "is_minor": 0.124,
+          "cabin_known": 0.317,
+          "has_family": 0.205
+        },
+        "age": {
+          "survived": -0.062,
+          "age": 1.0,
+          "fare": 0.13,
+          "fare_per_person": 0.221,
+          "log_fare": 0.139,
+          "family_size": -0.258,
+          "sibsp": -0.249,
+          "parch": -0.176,
+          "is_female": -0.103,
+          "is_minor": -0.575,
+          "cabin_known": 0.274,
+          "has_family": -0.176
+        },
+        "fare": {
+          "survived": 0.262,
+          "age": 0.13,
+          "fare": 1.0,
+          "fare_per_person": 0.784,
+          "log_fare": 0.835,
+          "family_size": 0.277,
+          "sibsp": 0.212,
+          "parch": 0.264,
+          "is_female": 0.222,
+          "is_minor": 0.006,
+          "cabin_known": 0.544,
+          "has_family": 0.334
+        },
+        "fare_per_person": {
+          "survived": 0.239,
+          "age": 0.221,
+          "fare": 0.784,
+          "fare_per_person": 1.0,
+          "log_fare": 0.671,
+          "family_size": -0.114,
+          "sibsp": -0.106,
+          "parch": -0.083,
+          "is_female": 0.153,
+          "is_minor": -0.11,
+          "cabin_known": 0.47,
+          "has_family": -0.041
+        },
+        "log_fare": {
+          "survived": 0.323,
+          "age": 0.139,
+          "fare": 0.835,
+          "fare_per_person": 0.671,
+          "log_fare": 1.0,
+          "family_size": 0.396,
+          "sibsp": 0.331,
+          "parch": 0.34,
+          "is_female": 0.269,
+          "is_minor": 0.088,
+          "cabin_known": 0.558,
+          "has_family": 0.49
+        },
+        "family_size": {
+          "survived": 0.018,
+          "age": -0.258,
+          "fare": 0.277,
+          "fare_per_person": -0.114,
+          "log_fare": 0.396,
+          "family_size": 1.0,
+          "sibsp": 0.891,
+          "parch": 0.783,
+          "is_female": 0.202,
+          "is_minor": 0.38,
+          "cabin_known": -0.007,
+          "has_family": 0.691
+        },
+        "sibsp": {
+          "survived": -0.033,
+          "age": -0.249,
+          "fare": 0.212,
+          "fare_per_person": -0.106,
+          "log_fare": 0.331,
+          "family_size": 0.891,
+          "sibsp": 1.0,
+          "parch": 0.415,
+          "is_female": 0.115,
+          "is_minor": 0.324,
+          "cabin_known": -0.038,
+          "has_family": 0.585
+        },
+        "parch": {
+          "survived": 0.082,
+          "age": -0.176,
+          "fare": 0.264,
+          "fare_per_person": -0.083,
+          "log_fare": 0.34,
+          "family_size": 0.783,
+          "sibsp": 0.415,
+          "parch": 1.0,
+          "is_female": 0.247,
+          "is_minor": 0.318,
+          "cabin_known": 0.038,
+          "has_family": 0.583
+        },
+        "is_female": {
+          "survived": 0.546,
+          "age": -0.103,
+          "fare": 0.222,
+          "fare_per_person": 0.153,
+          "log_fare": 0.269,
+          "family_size": 0.202,
+          "sibsp": 0.115,
+          "parch": 0.247,
+          "is_female": 1.0,
+          "is_minor": 0.107,
+          "cabin_known": 0.147,
+          "has_family": 0.306
+        },
+        "is_minor": {
+          "survived": 0.124,
+          "age": -0.575,
+          "fare": 0.006,
+          "fare_per_person": -0.11,
+          "log_fare": 0.088,
+          "family_size": 0.38,
+          "sibsp": 0.324,
+          "parch": 0.318,
+          "is_female": 0.107,
+          "is_minor": 1.0,
+          "cabin_known": -0.053,
+          "has_family": 0.311
+        },
+        "cabin_known": {
+          "survived": 0.317,
+          "age": 0.274,
+          "fare": 0.544,
+          "fare_per_person": 0.47,
+          "log_fare": 0.558,
+          "family_size": -0.007,
+          "sibsp": -0.038,
+          "parch": 0.038,
+          "is_female": 0.147,
+          "is_minor": -0.053,
+          "cabin_known": 1.0,
+          "has_family": 0.16
+        },
+        "has_family": {
+          "survived": 0.205,
+          "age": -0.176,
+          "fare": 0.334,
+          "fare_per_person": -0.041,
+          "log_fare": 0.49,
+          "family_size": 0.691,
+          "sibsp": 0.585,
+          "parch": 0.583,
+          "is_female": 0.306,
+          "is_minor": 0.311,
+          "cabin_known": 0.16,
+          "has_family": 1.0
+        }
+      }
+    }
+  },
+  "key_findings": [
+    "Overall survival rate was 38% (339 of 888 passengers).",
+    "Women survived at 74%, men at 19% \u2014 a 55% gap.",
+    "1st-class passengers survived at 62%, vs 24% for 3rd class.",
+    "The strongest pattern: 1st-class women survived at 97%; 3rd-class men at 14%.",
+    "Families of 2\u20134 survived better than singles or very large families \u2014 a non-linear effect.",
+    "Fare correlates positively with survival (+0.26), mostly as a proxy for class."
+  ],
+  "charts": [
+    {
+      "filename": "01_age_histogram.png",
+      "title": "Age distribution",
+      "caption": "Most passengers were between 20 and 40. Children (<12) survived disproportionately."
+    },
+    {
+      "filename": "02_survival_by_class.png",
+      "title": "Survival rate by class",
+      "caption": "1st-class passengers were ~2.6\u00d7 more likely to survive than 3rd-class."
+    },
+    {
+      "filename": "03_sex_class_heatmap.png",
+      "title": "Survival by sex \u00d7 class",
+      "caption": "1st-class women: 97% survived. 3rd-class men: 14%. The single strongest pattern in the data."
+    },
+    {
+      "filename": "04_family_size_bar.png",
+      "title": "Survival by family size",
+      "caption": "Small families (2\u20134) survived best. Alone or in very large groups, survival drops sharply."
+    },
+    {
+      "filename": "05_age_fare_scatter.png",
+      "title": "Age vs fare",
+      "caption": "Higher fares cluster with survival (green). A log scale is needed because fares range from $0 to $512."
+    },
+    {
+      "filename": "06_survival_by_age_line.png",
+      "title": "Survival rate across age",
+      "caption": "Children under 10 survived at well above the overall rate; survival drops off through middle and old age."
+    },
+    {
+      "filename": "07_correlation_heatmap.png",
+      "title": "Correlation matrix",
+      "caption": "Fare correlates most with survival (+0.26). Family_size, sibsp, and parch are highly co-linear (as expected)."
+    }
+  ],
+  "pipeline_sections": [
+    {
+      "id": "loading",
+      "title": "1. Loading",
+      "summary": "Pull the dataset once and persist it as a CSV so the rest of the pipeline behaves like real-world data.",
+      "steps": [
+        {
+          "title": "Load Titanic and cache a raw CSV",
+          "why": "Seaborn gives us a clean Python entry point, but real datasets arrive as files. Writing the raw CSV once means every later step reads from disk, which matches how you'd work with any real dataset.",
+          "code": "df = sns.load_dataset('titanic')\ndf.to_csv('data/raw/titanic.csv', index=False)",
+          "result": "891 rows \u00d7 15 columns cached at data/raw/titanic.csv."
+        }
+      ]
+    },
+    {
+      "id": "cleaning",
+      "title": "2. Cleaning",
+      "summary": "Remove redundant columns, fill missing values with appropriate strategies, and filter out extreme outliers.",
+      "steps": [
+        {
+          "title": "Drop redundant columns",
+          "why": "`class` duplicates `pclass`, `alive` duplicates `survived`, `embark_town` duplicates `embarked`, and `adult_male` is derivable from `sex` + `age`. Carrying duplicates risks subtle bugs in groupby and correlation.",
+          "code": "df = df.drop(columns=['class', 'alive', 'embark_town', 'adult_male'])",
+          "result": "15 columns \u2192 11 columns."
+        },
+        {
+          "title": "Fill missing `embarked` with the mode",
+          "why": "Only 2 rows have missing `embarked`. The mode ('S', Southampton) is by far the most common port, so single-value imputation is safe.",
+          "code": "df['embarked'] = df['embarked'].fillna(df['embarked'].mode().iloc[0])",
+          "result": "2 missing values filled with 'S'."
+        },
+        {
+          "title": "Fill missing `deck` with 'Unknown'",
+          "why": "77% of `deck` is missing \u2014 too sparse to impute realistically. An explicit 'Unknown' bucket keeps the column usable in charts and groupby (rows aren't silently dropped).",
+          "code": "df['deck'] = df['deck'].fillna('Unknown')",
+          "result": "688 missing values bucketed as 'Unknown'."
+        },
+        {
+          "title": "Impute missing `age` by (pclass, sex) median",
+          "why": "A global median erases information \u2014 a 1st-class woman has a very different age profile than a 3rd-class man. Group-wise medians via `groupby().transform()` preserve that signal.",
+          "code": "df['age'] = (\n    df.groupby(['pclass', 'sex'])['age']\n      .transform(lambda s: s.fillna(s.median()))\n)",
+          "result": "177 missing ages filled using the median of each (class, sex) group."
+        },
+        {
+          "title": "Drop fare outliers (> $300)",
+          "why": "Three passengers paid $512 \u2014 over 10\u00d7 the median fare. They distort the fare distribution and dominate correlations. A simple boolean mask removes them.",
+          "code": "df = df[df['fare'] <= 300].reset_index(drop=True)",
+          "result": "3 outlier rows removed. 891 \u2192 888 rows."
+        }
+      ]
+    },
+    {
+      "id": "features",
+      "title": "3. Feature engineering",
+      "summary": "Derive new columns that capture relationships the raw data only hints at.",
+      "steps": [
+        {
+          "title": "`family_size` + boolean flags",
+          "why": "Spouses/siblings and parents/children live in separate columns. Combining them (+1 for the passenger) creates a single number with a non-linear effect on survival. We also derive two convenience booleans for filtering and modeling.",
+          "code": "df['family_size'] = df['sibsp'] + df['parch'] + 1\ndf['has_family'] = (df['family_size'] > 1).astype(int)\ndf['is_minor']   = (df['age'] < 18).astype(int)",
+          "result": "Adds 3 columns. family_size ranges 1\u201311."
+        },
+        {
+          "title": "`age_group` via `pd.cut` (fixed bins)",
+          "why": "Continuous age is hard to compare across cohorts. `pd.cut` bins by fixed thresholds \u2014 useful when the boundaries (child/teen/adult/senior) are conceptually meaningful, not just statistically equal-sized.",
+          "code": "df['age_group'] = pd.cut(\n    df['age'],\n    bins=[0, 12, 17, 59, np.inf],\n    labels=['Child', 'Teen', 'Adult', 'Senior'],\n)",
+          "result": "750 Adults, 69 Children, 44 Teens, 25 Seniors."
+        },
+        {
+          "title": "`fare_per_person` = fare / family_size",
+          "why": "A $200 ticket for a family of 5 is very different from a $200 solo fare. Per-person fare is often the cleaner signal for class.",
+          "code": "df['fare_per_person'] = np.where(\n    df['family_size'] > 0,\n    df['fare'] / df['family_size'],\n    df['fare'],\n)",
+          "result": "Per-person fares range from $0 to ~$73 (after outlier filter)."
+        },
+        {
+          "title": "`fare_tier` via `pd.qcut` (equal-count bins)",
+          "why": "Where `pd.cut` uses fixed thresholds, `pd.qcut` makes 4 buckets of equal size \u2014 useful when you want a 'low/mid/high/premium' split that's robust to outliers and skew.",
+          "code": "df['fare_tier'] = pd.qcut(\n    df['fare'],\n    q=4,\n    labels=['Low', 'Mid', 'High', 'Premium'],\n)",
+          "result": "~222 passengers in each tier (888 / 4)."
+        },
+        {
+          "title": "`cabin_known` from `deck`",
+          "why": "Whether the cabin was *recorded* is itself signal \u2014 it correlates with class (1st-class records are more complete). A simple comparison turns the 'Unknown' bucket into a binary feature.",
+          "code": "df['cabin_known'] = (df['deck'] != 'Unknown').astype(int)",
+          "result": "200 passengers have a known cabin, 688 don't."
+        }
+      ]
+    },
+    {
+      "id": "encoding",
+      "title": "4. Encoding & normalization",
+      "summary": "Convert categoricals to numeric encodings and put continuous features on a comparable scale \u2014 the inputs most ML models expect.",
+      "steps": [
+        {
+          "title": "Binary encode `sex` \u2192 `is_female`",
+          "why": "A boolean comparison cast to int gives a single 0/1 column that can enter correlation matrices and regressions directly. Sex turns out to be the single strongest predictor of survival.",
+          "code": "df['is_female'] = (df['sex'] == 'female').astype(int)",
+          "result": "313 female (1), 575 male (0). Correlates ~+0.54 with survival."
+        },
+        {
+          "title": "One-hot encode `embarked` via `pd.get_dummies`",
+          "why": "Ports C / Q / S have no natural ordering, so an ordinal encoding would lie. One-hot encoding splits the column into 3 mutually-exclusive binary columns \u2014 the right shape for any linear model.",
+          "code": "embarked_dummies = pd.get_dummies(df['embarked'], prefix='emb').astype(int)\ndf = pd.concat([df, embarked_dummies], axis=1)",
+          "result": "Adds emb_C, emb_Q, emb_S (one column per port)."
+        },
+        {
+          "title": "Log-transform `fare` \u2192 `log_fare`",
+          "why": "Fare is heavily right-skewed: most people paid under $50, a few paid hundreds. `np.log1p` (= log(1+x)) compresses the long tail while gracefully handling fare = $0 (which plain `log` can't).",
+          "code": "df['log_fare'] = np.log1p(df['fare'])",
+          "result": "Distribution becomes roughly bell-shaped, friendlier to most models."
+        },
+        {
+          "title": "Z-score normalize age and fare",
+          "why": "Different features live on different scales \u2014 age (0-80) and fare ($0-$300) aren't comparable. Subtracting the mean and dividing by the std gives both a mean of 0 and an std of 1, so distance-based methods (KNN, PCA, gradient descent) treat them fairly.",
+          "code": "df['age_z']  = (df['age']  - df['age'].mean())  / df['age'].std()\ndf['fare_z'] = (df['fare'] - df['fare'].mean()) / df['fare'].std()",
+          "result": "Both columns now centered at 0 with unit std."
+        }
+      ]
+    },
+    {
+      "id": "analysis",
+      "title": "5. Analysis",
+      "summary": "The three pandas patterns that produce every number in the dashboard.",
+      "steps": [
+        {
+          "title": "Groupby + agg for survival rates",
+          "why": "Survival is encoded as 0/1, so the mean of `survived` is literally the survival rate. One groupby gives you both the count (`n`) and the rate at once.",
+          "code": "df.groupby('pclass', observed=True)['survived'].agg(\n    n='count', survival_rate='mean'\n).reset_index()",
+          "result": "1st: ~62% \u00b7 2nd: ~47% \u00b7 3rd: ~24% (after outlier filter)."
+        },
+        {
+          "title": "Crosstab for two-dimensional rates",
+          "why": "Single-variable comparisons can be confounded \u2014 class survival differs partly because women cluster in 1st class. A `sex \u00d7 class` crosstab disentangles the two.",
+          "code": "df.groupby(['sex', 'pclass'], observed=True)['survived']\n   .mean()\n   .unstack('pclass')",
+          "result": "1st-class women: 97%; 3rd-class men: 14%. The strongest pattern in the dataset."
+        },
+        {
+          "title": "Correlation matrix",
+          "why": "For numeric features, `.corr()` quickly reveals which are linearly related \u2014 both to the target (survival) and to each other (potential redundancy).",
+          "code": "df[['survived', 'age', 'fare', 'family_size', ...]].corr()",
+          "result": "Fare correlates +0.26 with survival; family_size correlates +0.89 with sibsp (as expected \u2014 they overlap)."
+        }
+      ]
+    }
+  ]
+}

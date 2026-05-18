@@ -1,0 +1,63 @@
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+
+.panel h2 { font-size: 18px; margin-bottom: 16px; }
+
+.subhead {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  margin: 18px 0 8px;
+}
+
+.shape {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.shape > div { display: flex; flex-direction: column; }
+.dim { color: var(--text-dim); font-size: 12px; }
+.bignum { font-size: 22px; font-weight: 600; color: var(--text); }
+.arrow { color: var(--text-dim); font-size: 22px; padding-bottom: 2px; }
+
+.list { list-style: none; padding: 0; margin: 0; }
+.list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+code {
+  background: var(--panel-2);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.transformGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.transformGrid p { margin: 0; font-size: 14px; }
+.transformGrid .tag {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(56, 189, 248, 0.1);
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 4px;
+}
+
+.imputed { list-style: none; padding: 0; margin: 0; }
+.imputed li { font-size: 14px; padding: 2px 0; }

@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# Frontend
+node_modules/
+dist/
+.DS_Store
+
+# Sync target (mirrors backend/outputs/, regenerated on `npm run dev`)
+frontend/public/
