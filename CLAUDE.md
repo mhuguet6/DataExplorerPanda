@@ -18,8 +18,11 @@ feature-engineering step is documented in the Pipeline tab of the dashboard
 with code snippets and reasoning. The user is treating it as a portfolio /
 study project.
 
-The whole thing runs locally with **no API server**. The backend writes
-static files; the frontend reads them.
+The Dashboard / Pipeline tabs run **without an API server** — the backend
+writes static files and the frontend reads them. The **Upload & Clean**
+tab is the one exception: it needs runtime pandas (arbitrary CSVs can't be
+pre-baked), so a small FastAPI service runs at `localhost:8000` and Vite
+proxies `/api/*` to it.
 
 ---
 
@@ -101,7 +104,9 @@ DataExplorerPanda/
 │       ├── clean_data.py    ← Phase 2: impute, drop, filter, feature engineer, encode
 │       ├── analyze.py       ← Phase 3: groupby/crosstab/correlation. Returns dataframes, never prints
 │       ├── visualize.py     ← Phase 4: 7 charts. Each function returns {filename,title,caption}
-│       └── export.py        ← Phase 5: orchestrator + writes insights.json
+│       ├── export.py        ← Phase 5: orchestrator + writes insights.json
+│       ├── suggest_clean.py ← Upload & Clean: suggestion engine + step applier (pure pandas)
+│       └── api.py           ← Upload & Clean: FastAPI service (/api/upload, /api/clean, /api/download)
 │
 └── frontend/
     ├── package.json
@@ -122,7 +127,8 @@ DataExplorerPanda/
             ├── KeyFindings.{jsx,module.css}       ← numbered insight bullets
             ├── ChartsGrid.{jsx,module.css}        ← 2-col grid of <figure>s with PNGs
             ├── TablesGrid.{jsx,module.css}        ← handles BOTH row-tables AND matrix-tables
-            └── PipelineView.{jsx,module.css}      ← Pipeline tab: 5 sections, 18 step cards
+            ├── PipelineView.{jsx,module.css}      ← Pipeline tab: 5 sections, 18 step cards
+            └── UploadClean.{jsx,module.css}       ← Upload tab: state machine (idle → suggested → cleaned)
 ```
 
 ---
@@ -218,12 +224,13 @@ The frontend imports this *one* file. No other fetches happen.
 
 ### Tabs
 
-The dashboard has exactly **2 tabs**, controlled by local `useState` in `App.jsx`:
+The dashboard has **3 tabs**, controlled by local `useState` in `App.jsx`:
 
-| Tab | id | Content |
-|---|---|---|
-| **Dashboard** | `dashboard` | KeyMetrics + (DatasetOverview ∥ KeyFindings) + ChartsGrid + TablesGrid |
-| **Pipeline** | `pipeline` | PipelineView — 5 sections, 18 numbered step cards |
+| Tab | id | Content | Backend |
+|---|---|---|---|
+| **Dashboard** | `dashboard` | KeyMetrics + (DatasetOverview ∥ KeyFindings) + ChartsGrid + TablesGrid | static `insights.json` |
+| **Pipeline** | `pipeline` | PipelineView — 5 sections, 18 numbered step cards | static `insights.json` |
+| **Upload & Clean** | `upload` | UploadClean — drop-zone → suggestion list → cleaned preview + download | FastAPI on :8000 |
 
 `TabBar` component renders the nav; it's just buttons with `aria-selected` and an underline on the active tab. No routing.
 
@@ -317,15 +324,27 @@ npm install
 
 ### Daily run
 
+The app now needs **two terminals running concurrently**:
+
 ```bash
-# 1. Regenerate backend artifacts (after any pandas change)
+# Terminal A — API server (required for the Upload & Clean tab)
 cd backend
 source .venv/bin/activate
-python src/export.py        # full pipeline
+uvicorn api:app --app-dir src --reload --port 8000
 
-# 2. Launch dashboard (auto-syncs assets via predev hook)
-cd ../frontend
+# Terminal B — frontend
+cd frontend
 npm run dev                 # http://localhost:5173
+```
+
+The Dashboard / Pipeline tabs work without Terminal A (they read static
+`insights.json`). The Upload tab will throw `HTTP 500` if Terminal A is
+missing — Vite's proxy logs it as `ECONNREFUSED` to :8000.
+
+If you change the Titanic pipeline, regenerate static artifacts:
+
+```bash
+cd backend && source .venv/bin/activate && python src/export.py
 ```
 
 ### Running individual phases
@@ -362,6 +381,10 @@ cd frontend && npm run sync
 | Chart palette (red/green) | `backend/src/visualize.py` → `SURVIVED_PALETTE` |
 | Tab state / dispatch | `frontend/src/App.jsx` |
 | Sync script (backend → frontend) | `frontend/scripts/sync-backend-outputs.js` |
+| Upload & Clean: suggestion rules | `backend/src/suggest_clean.py` → `suggest()` |
+| Upload & Clean: API endpoints | `backend/src/api.py` |
+| Upload & Clean: state machine | `frontend/src/components/UploadClean.jsx` |
+| Vite → uvicorn proxy | `frontend/vite.config.js` → `server.proxy` |
 
 ---
 
@@ -380,7 +403,7 @@ cd frontend && npm run sync
 
 The user explicitly chose to keep the project simple. **Don't add these** without asking:
 
-- A real backend API (FastAPI, Flask) — we deliberately chose static files
+- ~~A real backend API~~ — we added a small FastAPI service for the Upload & Clean tab (May 2026). Anything beyond that surface should still be questioned.
 - A UI library (MUI, Mantine, Tailwind) — chose plain CSS Modules
 - A state management library (Redux, Zustand) — single useState is enough
 - A router (react-router) — only 2 tabs

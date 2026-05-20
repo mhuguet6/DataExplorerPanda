@@ -6,11 +6,13 @@ import ChartsGrid from "./components/ChartsGrid.jsx";
 import TablesGrid from "./components/TablesGrid.jsx";
 import TabBar from "./components/TabBar.jsx";
 import PipelineView from "./components/PipelineView.jsx";
+import UploadClean from "./components/UploadClean.jsx";
 import styles from "./App.module.css";
 
 const TABS = [
   { id: "dashboard", label: "Dashboard" },
   { id: "pipeline", label: "Pipeline" },
+  { id: "upload", label: "Upload & Clean" },
 ];
 
 export default function App() {
@@ -82,6 +84,8 @@ export default function App() {
       {activeTab === "pipeline" && (
         <PipelineView sections={insights.pipeline_sections} />
       )}
+
+      {activeTab === "upload" && <UploadClean />}
 
       <footer className={styles.footer}>
         Source: {insights.dataset.source}

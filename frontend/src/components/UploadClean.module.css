@@ -1,0 +1,285 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.intro h2 { font-size: 18px; margin-bottom: 6px; }
+.intro p {
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.55;
+  max-width: 720px;
+}
+
+.stack { display: flex; flex-direction: column; gap: 18px; }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+
+.panel h3 {
+  font-size: 14px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.panelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.count { font-size: 12px; color: var(--text-dim); }
+
+.error {
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  color: var(--bad);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.empty { color: var(--text-dim); font-size: 14px; }
+
+/* ---------- Drop zone ------------------------------------------------- */
+
+.drop {
+  background: var(--panel);
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.dropActive {
+  border-color: var(--accent);
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.dropTitle { font-size: 18px; font-weight: 500; }
+.dropHint { color: var(--text-dim); font-size: 13px; margin: -2px 0; }
+.dropFoot { color: var(--text-dim); font-size: 12px; margin-top: 6px; }
+
+/* ---------- Buttons --------------------------------------------------- */
+
+.btnPrimary {
+  display: inline-block;
+  background: var(--accent);
+  color: #0b1220;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btnPrimary:hover { filter: brightness(1.08); }
+.btnPrimary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btnGhost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.btnGhost:hover { border-color: var(--accent); color: var(--accent); }
+.btnGhost:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* ---------- Stats ----------------------------------------------------- */
+
+.statsRow { display: flex; gap: 28px; flex-wrap: wrap; }
+
+.stat { display: flex; flex-direction: column; gap: 4px; }
+.statLabel {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.statValue {
+  font-size: 22px;
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.statBefore { color: var(--text-dim); text-decoration: line-through; font-weight: 400; }
+.statArrow { color: var(--text-dim); font-weight: 400; }
+.statAfter { color: var(--good); }
+
+/* ---------- Suggestions ---------------------------------------------- */
+
+.suggList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.sugg {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: opacity 0.15s;
+}
+
+.suggOff { opacity: 0.45; }
+
+.suggToggle {
+  flex-shrink: 0;
+  background: rgba(74, 222, 128, 0.15);
+  color: var(--good);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  cursor: pointer;
+  min-width: 88px;
+}
+.suggOff .suggToggle {
+  background: rgba(248, 113, 113, 0.12);
+  color: var(--bad);
+  border-color: rgba(248, 113, 113, 0.4);
+}
+
+.suggBody { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; flex: 1; }
+
+.suggAction {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--accent);
+  font-family: "SFMono-Regular", Menlo, monospace;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.suggCol {
+  background: var(--panel);
+  color: var(--text);
+  font-family: "SFMono-Regular", Menlo, monospace;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.suggReason {
+  flex-basis: 100%;
+  color: var(--text-dim);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ---------- Custom step editor --------------------------------------- */
+
+.customRow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+.input {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+}
+.input:focus { outline: none; border-color: var(--accent); }
+
+.customList {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.customItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.customVal { color: var(--text-dim); font-size: 13px; }
+
+.removeBtn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 6px;
+}
+.removeBtn:hover { color: var(--bad); }
+
+/* ---------- Log ------------------------------------------------------- */
+
+.logList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.logList li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+
+.logDetail { color: var(--text-dim); }
+
+.log_ok .suggAction { /* default styling already green-ish via accent */ }
+.log_skipped .logDetail { color: var(--text-dim); font-style: italic; }
+.log_error .suggAction { background: rgba(248, 113, 113, 0.15); color: var(--bad); }
+.log_error .logDetail { color: var(--bad); }
+
+/* ---------- Preview table -------------------------------------------- */
+
+.scroll { overflow-x: auto; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.table th, .table td {
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+.table thead th {
+  color: var(--text-dim);
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.table tbody tr:last-child td { border-bottom: none; }

@@ -22,6 +22,10 @@ simple "static artifacts" architecture in between.
 The dashboard shows headline metrics, dataset overview, key findings,
 all 7 visualizations, and the underlying data tables.
 
+It also includes an **Upload & Clean** tab where you can upload your own
+CSV: pandas inspects it, suggests cleaning steps, you accept/reject each
+one (or add your own), then download the cleaned result.
+
 ---
 
 ## Tech stack
@@ -50,10 +54,13 @@ seaborn ──▶ raw CSV ──▶ cleaned CSV ──▶ analysis ──▶ cha
                                           frontend/public/  ──▶  React reads it
 ```
 
-Key design choice: **no API server**. The backend writes static files, and a
-tiny npm script copies them into the frontend's `public/` directory. Simpler
-to run, simpler to deploy, and the JSON schema acts as the contract between
-the two halves.
+Key design choice for the **Dashboard / Pipeline** tabs: no API server.
+The backend writes static files, a tiny npm script copies them into the
+frontend's `public/` directory, and the JSON schema is the contract.
+
+The **Upload & Clean** tab is the one exception: it needs runtime pandas
+(arbitrary user CSVs can't be pre-baked), so it talks to a small FastAPI
+service at `localhost:8000`. Vite proxies `/api/*` there during dev.
 
 ---
 
@@ -73,11 +80,13 @@ DataExplorerPanda/
 │   │   ├── charts/                      ← 7 PNG charts
 │   │   └── insights.json                ← consumed by React
 │   └── src/
-│       ├── load_data.py    # Phase 1 — load + cache raw CSV
-│       ├── clean_data.py   # Phase 2 — impute + feature engineering
-│       ├── analyze.py      # Phase 3 — groupby, crosstabs, correlations
-│       ├── visualize.py    # Phase 4 — chart generation
-│       └── export.py       # Phase 5 — orchestrates everything + writes JSON
+│       ├── load_data.py     # Phase 1 — load + cache raw CSV
+│       ├── clean_data.py    # Phase 2 — impute + feature engineering
+│       ├── analyze.py       # Phase 3 — groupby, crosstabs, correlations
+│       ├── visualize.py     # Phase 4 — chart generation
+│       ├── export.py        # Phase 5 — orchestrates everything + writes JSON
+│       ├── suggest_clean.py # Upload & Clean — suggestion engine + step applier
+│       └── api.py           # Upload & Clean — FastAPI service
 │
 └── frontend/
     ├── package.json
@@ -124,7 +133,13 @@ npm install
 
 ## How to run
 
-### 1. Generate the data + charts + insights
+> **You need two terminals open at the same time** — one for the API
+> server (used by the Upload & Clean tab) and one for the Vite dev server.
+> Skipping the API terminal is the most common cause of `HTTP 500` errors
+> on the Upload tab: Vite's proxy can't reach `localhost:8000` and bubbles
+> a 500 back to the browser.
+
+### 1. (One-time) Generate the Titanic insights
 
 ```bash
 cd backend
@@ -139,7 +154,24 @@ writes:
 - `backend/outputs/insights.json`
 - `backend/outputs/charts/*.png` (7 files)
 
-### 2. Launch the dashboard
+Only needed when you change the backend pipeline — the artifacts are
+checked-in / cached.
+
+### 2. Terminal A — API server (FastAPI / uvicorn)
+
+```bash
+cd backend
+source .venv/bin/activate
+uvicorn api:app --app-dir src --reload --port 8000
+```
+
+You should see `Uvicorn running on http://127.0.0.1:8000`. Smoke-check:
+
+```bash
+curl http://localhost:8000/api/health   # → {"ok":true,"sessions":0}
+```
+
+### 3. Terminal B — Vite dev server (React)
 
 ```bash
 cd frontend
@@ -147,8 +179,9 @@ npm run dev
 ```
 
 Opens [http://localhost:5173](http://localhost:5173). The `predev` hook
-automatically copies the backend outputs into `frontend/public/` before
-starting Vite — you never have to remember to sync manually.
+auto-copies backend outputs into `frontend/public/` before starting Vite.
+Vite proxies `/api/*` → `http://localhost:8000`, so the frontend talks to
+the API as if it were same-origin.
 
 If you re-run the backend pipeline, just refresh the page (or run
 `npm run sync` to be explicit).
@@ -236,6 +269,17 @@ wiring them together.
 ---
 
 ## Troubleshooting
+
+**"HTTP 500" when uploading a CSV in the Upload & Clean tab**
+The API server isn't running. Open a second terminal and start it:
+
+```bash
+cd backend && source .venv/bin/activate && uvicorn api:app --app-dir src --reload --port 8000
+```
+
+Confirm with `curl http://localhost:8000/api/health` — you should see
+`{"ok":true,"sessions":0}`. The Vite dev server log will also reveal this
+as `[vite] http proxy error: /api/upload  AggregateError [ECONNREFUSED]`.
 
 **"Couldn't load insights" error in the dashboard**
 The frontend can't find `/insights.json`. Run:
